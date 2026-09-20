@@ -1,0 +1,21 @@
+Importancia de parámetros SHARP por permutación — BiLSTM 48 h
+(caída de TSS al permutar; media ± σ sobre 5 folds × 5 semillas)
+
+  Parámetro            ΔTSS (imp.)        σ
+  TOTUSJH                   0.7312   0.1258
+  TOTUSJZ                   0.2631   0.0603
+  SAVNCPP                   0.2346   0.1275
+  TOTPOT                    0.1742   0.0977
+  R_VALUE                   0.0967   0.0673
+  USFLUX                    0.0523   0.0245
+  USFLUXL                   0.0497   0.0258
+  AREA_ACR                  0.0431   0.0406
+  NACR                      0.0316   0.0271
+  ABSNJZH                   0.0309   0.0405
+  MEANPOT                   0.0052   0.0115
+  MEANGBZ                   0.0046   0.0060
+  MEANSHR                   0.0019   0.0051
+  MEANGAM                   0.0015   0.0050
+  MEANGBL                   0.0013   0.0049
+  MEANGBT                  -0.0002   0.0017
+  SHRGT45                  -0.0017   0.0081

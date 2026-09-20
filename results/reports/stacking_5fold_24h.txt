@@ -1,0 +1,21 @@
+Stacking meta-MLP 5-fold — horizonte 24h  B=10000
+
+  Fold   tau   stack_test_TSS   (base: swin / lstm)
+  k=0  0.51   0.7028        (0.672 / 0.752)
+  k=1  0.42   0.6984        (-0.000 / 0.749)
+  k=2  0.58   0.7150        (0.477 / 0.723)
+  k=3  0.65   0.7461        (0.762 / 0.744)
+  k=4  0.68   0.7656        (0.740 / 0.764)
+
+  Stacking CV: 0.7256 ± 0.0261
+  Stacking ENSEMBLE: TSS=0.7356  (tau=0.57)
+
+  Stacking  vs  Swin3D
+    TSS_A=0.7356  TSS_B=0.7437
+    Δ = -0.0081   IC95% = [-0.0284, +0.0166]
+    P(A>B) = 23.3%   →  NO significativo
+
+  Stacking  vs  BiLSTM
+    TSS_A=0.7356  TSS_B=0.7584
+    Δ = -0.0228   IC95% = [-0.0258, -0.0197]
+    P(A>B) = 0.0%   →  SIGNIFICATIVO

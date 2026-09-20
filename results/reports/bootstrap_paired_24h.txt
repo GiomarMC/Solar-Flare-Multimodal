@@ -1,0 +1,27 @@
+Bootstrap PAREADO — horizonte 24h  B=10000  device=cuda
+
+================================================================
+  COMPARACIÓN PAREADA — 24h  (test n=9384, pos=195)
+================================================================
+  Swin3D  ensemble: TSS=0.7422  tau=0.88
+  BiLSTM  ensemble: TSS=0.7583  tau=0.93
+  Fusión  ensemble: TSS=0.7587  tau=0.93
+  Fusión por fold (test): [0.7431 0.7488 0.7254 0.752  0.7643]
+  Fusión  CV: 0.7467 ± 0.0127
+  w_phys elegido por fold (val): [0.9, 1.0, 0.9, 0.65, 1.0]
+  tau elegido por fold (val):    [0.96, 0.98, 0.82, 0.95, 0.95]
+
+  Swin3D  vs  BiLSTM
+    TSS_A=0.7423  TSS_B=0.7584
+    Δ = -0.0161   IC95% = [-0.0202, -0.0120]
+    P(A>B) = 0.0%   →  SIGNIFICATIVO
+
+  Fusión  vs  Swin3D
+    TSS_A=0.7587  TSS_B=0.7423
+    Δ = +0.0164   IC95% = [+0.0124, +0.0205]
+    P(A>B) = 100.0%   →  SIGNIFICATIVO
+
+  Fusión  vs  BiLSTM
+    TSS_A=0.7587  TSS_B=0.7584
+    Δ = +0.0003   IC95% = [-0.0005, +0.0012]
+    P(A>B) = 72.6%   →  NO significativo

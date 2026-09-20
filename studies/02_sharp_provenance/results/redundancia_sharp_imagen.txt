@@ -1,0 +1,53 @@
+==============================================================================
+  REDUNDANCIA SHARP <-> IMAGEN
+  ¿Cuánto de cada parámetro físico es recuperable desde el magnetograma LOS?
+==============================================================================
+  n = 500 frames (último frame de secuencias del test 48h)
+  Agregados de la imagen: sum|B| = suma de |2p-1| ; area = #pixeles |2p-1|>0.3
+  (dos líneas de numpy, sin aprender nada)
+
+    # SHARP       en modelo v3  rho(sum|B|)  rho(area)  |rho| max
+   18 NACR                  sí        0.974      0.990      0.990
+   17 AREA_ACR              sí        0.975      0.989      0.989
+    4 USFLUXL               sí        0.977      0.989      0.989
+    2 TOTUSJZ               sí        0.916      0.930      0.930
+    0 TOTUSJH               sí        0.910      0.925      0.925
+    3 USFLUX                sí        0.910      0.923      0.923
+    1 TOTPOT                sí        0.842      0.861      0.861
+   12 SAVNCPP               sí        0.827      0.843      0.843
+   11 ABSNJZH               sí        0.725      0.739      0.739
+   20 R_VALUE               sí        0.707      0.726      0.726
+    7 MEANGBT               sí       -0.618     -0.614      0.618
+    8 MEANGBZ               sí       -0.604     -0.600      0.604
+   15 MEANSHR               sí        0.496      0.528      0.528
+   16 SHRGT45               sí        0.492      0.528      0.528
+   14 MEANPOT               sí        0.493      0.525      0.525
+   19 MEANGAM               sí        0.357      0.405      0.405
+    6 MEANGBL               sí        0.270      0.325      0.325
+    5 MEANGBH               NO       -0.280     -0.231      0.280
+   10 MEANJZD               NO       -0.181     -0.177      0.181
+   13 MEANALP               NO        0.059      0.059      0.059
+    9 MEANJZH               NO        0.038      0.034      0.038
+
+------------------------------------------------------------------------------
+  De los 17 SHARP que SÍ entran al BiLSTM de 17:
+    |rho| >= 0.7: 10/17  (59 %)
+    |rho| >= 0.8: 8/17  (47 %)
+    |rho| >= 0.9: 6/17  (35 %)
+    mediana |rho| = 0.739
+
+  De los 4 que v3 DESCARTA por baja d de Cohen univariada:
+    MEANJZH    |rho| = 0.038
+    MEANALP    |rho| = 0.059
+    MEANJZD    |rho| = 0.181
+    MEANGBH    |rho| = 0.280
+    mediana |rho| = 0.120
+
+  CONCLUSIÓN: los 4 parámetros excluidos del modelo son justamente los MENOS
+  recuperables desde la imagen — es decir, la selección univariada descartó
+  precisamente la información potencialmente NO redundante con la rama visual.
+  La redundancia observada es en parte consecuencia de esa selección, no solo
+  de que ambas modalidades compartan fuente física.
+
+  Contraste a testear: BiLSTM-21 (dataset_temporal_v5) y recálculo del techo
+  con LSTM_MODEL=lstm21 python graficos/diversidad_ramas.py

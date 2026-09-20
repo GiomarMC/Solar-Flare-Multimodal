@@ -1,0 +1,83 @@
+================================================================================================
+  ¿FILTRA LA PRESELECCIÓN DE PARÁMETROS SHARP? — d de Cohen recalculada por fold
+  Criterio del paper: se descarta el parámetro si d < 0.6
+================================================================================================
+
+  (0) Calibración: d sobre el DATASET COMPLETO, contra los valores citados en el paper
+      Agregación: media de los 16 frames de cada secuencia
+      variante                       MEANGBH   MEANJZH   MEANJZD   MEANALP   coincide
+      n = 118768 secuencias (ambos horizontes)
+      valores crudos                   0.136     0.278     0.494     0.235   no (err max 0.17)
+      log-transformados                0.181     0.275     0.536     0.250   no (err max 0.17)
+      citados en el paper               0.14      0.11      0.53      0.17
+      -> se usa la variante 'log-transformados' (la más cercana, error máx 0.165)
+
+################################################################################################
+  HORIZONTE 24 h — d calculada SOLO con los folds de entrenamiento
+################################################################################################
+      Parámetro         k=0      k=1      k=2      k=3      k=4  completo  veredicto
+      TOTUSJH         1.404    1.474    1.408    1.392    1.392     1.428   retenido en todos
+      TOTPOT          1.273    1.351    1.322    1.300    1.278     1.340   retenido en todos
+      TOTUSJZ         1.323    1.389    1.342    1.325    1.310     1.352   retenido en todos
+      USFLUX          1.224    1.268    1.254    1.222    1.191     1.249   retenido en todos
+      USFLUXL         1.187    1.236    1.183    1.190    1.169     1.198   retenido en todos
+      MEANGBH         0.223    0.283    0.279    0.223    0.358     0.246   descartado en todos
+      MEANGBL         1.212    1.370    1.356    1.306    1.285     1.345   retenido en todos
+      MEANGBT         0.691    0.761    0.737    0.775    0.687     0.808   retenido en todos
+      MEANGBZ         0.484    0.546    0.526    0.558    0.499     0.589   descartado en todos
+      MEANJZH         0.207    0.388    0.272    0.165    0.097     0.320   descartado en todos
+      MEANJZD         0.522    0.442    0.483    0.445    0.451     0.516   descartado en todos
+      ABSNJZH         1.587    1.659    1.580    1.502    1.573     1.611   retenido en todos
+      SAVNCPP         1.486    1.572    1.520    1.477    1.487     1.527   retenido en todos
+      MEANALP         0.203    0.342    0.253    0.204    0.121     0.279   descartado en todos
+      MEANPOT         1.084    1.204    1.165    1.150    1.143     1.215   retenido en todos
+      MEANSHR         0.948    1.078    1.048    1.050    1.045     1.093   retenido en todos
+      SHRGT45         0.871    0.963    0.946    0.936    0.952     0.982   retenido en todos
+      AREA_ACR        1.183    1.228    1.178    1.178    1.162     1.188   retenido en todos
+      NACR            1.171    1.228    1.171    1.169    1.158     1.181   retenido en todos
+      MEANGAM         0.815    0.940    0.921    0.912    0.933     0.961   retenido en todos
+      R_VALUE         1.102    1.184    1.129    1.112    1.119     1.135   retenido en todos
+
+      Parámetros retenidos por fold: IDÉNTICOS en los 5  (16 parámetros)
+      ¿Coincide con los 17 del paper? NO
+        de menos: MEANGBZ  (d por fold 0.484–0.558  vs  0.589 en el completo)
+
+################################################################################################
+  HORIZONTE 48 h — d calculada SOLO con los folds de entrenamiento
+################################################################################################
+      Parámetro         k=0      k=1      k=2      k=3      k=4  completo  veredicto
+      TOTUSJH         1.443    1.504    1.449    1.422    1.395     1.494   retenido en todos
+      TOTPOT          1.303    1.366    1.362    1.306    1.268     1.396   retenido en todos
+      TOTUSJZ         1.363    1.422    1.383    1.355    1.314     1.417   retenido en todos
+      USFLUX          1.264    1.306    1.307    1.257    1.199     1.320   retenido en todos
+      USFLUXL         1.228    1.265    1.231    1.221    1.159     1.255   retenido en todos
+      MEANGBH         0.148    0.182    0.155    0.119    0.289     0.146   descartado en todos
+      MEANGBL         1.240    1.354    1.298    1.287    1.275     1.375   retenido en todos
+      MEANGBT         0.721    0.769    0.791    0.767    0.680     0.855   retenido en todos
+      MEANGBZ         0.521    0.566    0.580    0.555    0.494     0.634   descartado en todos
+      MEANJZH         0.156    0.366    0.186    0.082    0.012     0.252   descartado en todos
+      MEANJZD         0.497    0.446    0.470    0.427    0.447     0.551   descartado en todos
+      ABSNJZH         1.662    1.689    1.622    1.538    1.582     1.678   retenido en todos
+      SAVNCPP         1.557    1.602    1.575    1.528    1.515     1.612   retenido en todos
+      MEANALP         0.173    0.318    0.202    0.134    0.045     0.236   descartado en todos
+      MEANPOT         1.073    1.156    1.165    1.089    1.093     1.224   retenido en todos
+      MEANSHR         0.947    1.047    1.036    0.994    1.004     1.103   retenido en todos
+      SHRGT45         0.870    0.941    0.937    0.895    0.924     0.987   retenido en todos
+      AREA_ACR        1.225    1.260    1.225    1.214    1.156     1.245   retenido en todos
+      NACR            1.213    1.254    1.214    1.201    1.147     1.234   retenido en todos
+      MEANGAM         0.797    0.885    0.884    0.832    0.874     0.940   retenido en todos
+      R_VALUE         1.100    1.180    1.120    1.090    1.108     1.159   retenido en todos
+
+      Parámetros retenidos por fold: IDÉNTICOS en los 5  (16 parámetros)
+      ¿Coincide con los 17 del paper? NO
+        de menos: MEANGBZ  (d por fold 0.494–0.580  vs  0.634 en el completo)
+
+================================================================================================
+  CONCLUSIÓN
+================================================================================================
+  (a) ESTABILIDAD ENTRE FOLDS: la selección es IDÉNTICA en los 5 folds de cada
+      horizonte. Ningún parámetro cambia de lado al variar el fold de validación,
+      de modo que la preselección no depende del periodo que se deja fuera.
+  (b) En [24, 48] h el conjunto difiere del de los 17 del paper (ver arriba).
+      Si el parámetro afectado es marginal en importancia, basta con reportarlo;
+      si no, hay que rehacer la selección por fold y reentrenar.

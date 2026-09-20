@@ -1,0 +1,32 @@
+data:
+  base_dir: ${SFMM_DATA}
+  fits_dir: /mnt/almacenamiento/magnetogram_fits
+  horizon: 48
+
+model:
+  img_size: 224
+  num_frames: 16
+  clip_gauss: 500.0
+  pretrained: true
+
+training:
+  seed: 42
+  epochs: 60
+  batch_size: 3
+  accumulate_grad_batches: 4      # effective batch = 12
+  learning_rate: 1.0e-7           # lr único global — igual que GRIM
+  lr_reduce_factor: 0.5
+  lr_patience: 5
+  weight_decay: 5.0e-4
+  pos_weight: 10.0
+  val_pos_weight: 38.0
+  patience: 20
+  num_workers: 4
+  aug_rotation: 180.0
+  aug_noise_std: 0.02
+  aug_crop_scale: 0.80
+
+threshold:
+  sweep_start: 0.01
+  sweep_end: 0.99
+  sweep_step: 0.01

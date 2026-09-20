@@ -1,0 +1,43 @@
+data:
+  base_dir: ${SFMM_DATA}
+  seq_dir: Seq_Magnetogram/M24/Seqs16
+  img_dir: magnetogram_jpg
+  para_flare: para_flare_21params.txt
+  splits:
+    train:
+    - Seq_Magnetogram/M24/Seq16_flare_Mclass_24h_TrainVal1.txt
+    - Seq_Magnetogram/M24/Seq16_flare_Mclass_24h_TrainVal2.txt
+    - Seq_Magnetogram/M24/Seq16_flare_Mclass_24h_TrainVal3.txt
+    - Seq_Magnetogram/M24/Seq16_flare_Mclass_24h_TrainVal4.txt
+    val:
+    - Seq_Magnetogram/M24/Seq16_flare_Mclass_24h_TrainVal0.txt
+    test:
+    - Seq_Magnetogram/M24/Seq16_flare_Mclass_24h_Test.txt
+model:
+  sharp_dim: 12
+  hidden: 64
+  bidirectional: true
+  num_layers: 1
+  physics_out: 64
+  dropout: 0.4
+  num_frames: 16
+training:
+  seed: 42
+  epochs: 100
+  batch_size: 64
+  learning_rate: 0.0003
+  lr_reduce_factor: 0.5
+  lr_patience: 5
+  weight_decay: 0.001
+  pos_weight: 10.0
+  val_pos_weight: 38.0
+  patience: 15
+  num_workers: 4
+threshold:
+  sweep_start: 0.01
+  sweep_end: 0.99
+  sweep_step: 0.01
+output:
+  dir: outputs
+  checkpoint_dir: outputs/checkpoints_lstm12_cv_24h_k0
+  log_dir: outputs/logs_lstm12_cv_24h_k0

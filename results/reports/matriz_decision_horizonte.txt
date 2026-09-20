@@ -1,0 +1,34 @@
+====================================================================================
+  MATRIZ DE DECISIÓN POR HORIZONTE — recalculada íntegramente desde los logits
+====================================================================================
+
+------------------------------------------------------------------------------------
+  HORIZONTE 24 h   (test n=9384, positivos=195, sigma entre folds = 0.0382)
+------------------------------------------------------------------------------------
+  Rama                   TSS     POD     FAR     HSS      F1     AUC  BSS_cal      params   tau
+  Swin3D (FITS)       0.7422  0.8462  0.8527  0.2235  0.2510  0.9227   0.0840  28,158,070  0.88
+  BiLSTM (SHARP)      0.7583  0.8462  0.8302  0.2571  0.2828  0.9200   0.1990      76,033  0.93
+
+  Objetivo                          Recomendación   Respaldo
+  Máximo TSS                        BiLSTM          gana por 0.016 [+0.012,+0.020], < sigma folds (0.038)
+  Economía de falsas alarmas (HSS)  BiLSTM          gana por 0.034 [+0.025,+0.043], > sigma folds
+  Fiabilidad probabilística (BSS)   BiLSTM          gana por 0.115 [+0.077,+0.153], > sigma folds
+  Costo computacional               BiLSTM          370x menos parámetros
+
+------------------------------------------------------------------------------------
+  HORIZONTE 48 h   (test n=9384, positivos=413, sigma entre folds = 0.0403)
+------------------------------------------------------------------------------------
+  Rama                   TSS     POD     FAR     HSS      F1     AUC  BSS_cal      params   tau
+  Swin3D (FITS)       0.8684  0.9879  0.7243  0.3890  0.4311  0.9622   0.2512  28,158,070  0.89
+  BiLSTM (SHARP)      0.8412  0.9104  0.6229  0.5024  0.5333  0.9627   0.4738      76,033  0.97
+
+  Objetivo                          Recomendación   Respaldo
+  Máximo TSS                        Swin3D          gana por 0.027 [+0.002,+0.054], > sigma folds
+  Economía de falsas alarmas (HSS)  BiLSTM          gana por 0.113 [+0.094,+0.132], > sigma folds
+  Fiabilidad probabilística (BSS)   BiLSTM          gana por 0.223 [+0.195,+0.251], > sigma folds
+  Costo computacional               BiLSTM          370x menos parámetros
+
+====================================================================================
+  Nota: 'gana por X pero < sigma folds' significa que la diferencia es real para
+  ESTE test pero menor que la variabilidad al reentrenar — no sostiene por sí sola
+  una recomendación de modelo. Ver graficos/equivalencia_tost.txt.

@@ -1,0 +1,18 @@
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+.venv/
+env/
+
+# Salidas de entrenamiento: los checkpoints ocupan ~31 GB y no se publican.
+# Lo que sí se versiona son los logits (results/logits) y los informes.
+outputs/
+checkpoints*/
+logs*/
+*.ckpt
+lightning_logs/
+
+# Datos: se descargan aparte (ver data/README.md)
+data/SFF_MagSeq_MViTs/
+data/magnetogram_fits/
+data/para_flare_21params.txt

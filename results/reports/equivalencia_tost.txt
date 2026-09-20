@@ -1,0 +1,61 @@
+==============================================================================
+  TEST DE EQUIVALENCIA (TOST) — Swin3D vs BiLSTM por horizonte
+==============================================================================
+  delta_min = margen mas pequeño dentro del cual las ramas son equivalentes
+            = max(|IC_inf|, |IC_sup|) del bootstrap pareado (B=10000, estratificado)
+
+------------------------------------------------------------------------------
+  HORIZONTE 24 h
+------------------------------------------------------------------------------
+    Swin3D (FITS)      TSS por fold: 0.7140 +- 0.0382
+    BiLSTM (SHARP)     TSS por fold: 0.7465 +- 0.0134
+    -> piso de ruido del estudio (mayor sigma entre folds) = 0.0382
+
+    tau barrido en val (== tau_opt de los .txt)   (tau_swin=0.88, tau_lstm=0.93)
+       TSS: Swin3D 0.7422  |  BiLSTM 0.7583
+       Delta = -0.0161   IC95% = [-0.0202, -0.0120]
+       significancia: SI (IC excluye 0)
+       delta_min de equivalencia = +-0.0202 TSS   (0.53x el piso de ruido)
+
+    AUC (secundaria, invariante al umbral; B=2000)
+       Swin3D 0.9227  |  BiLSTM 0.9200
+       Delta = +0.0028   IC95% = [-0.0068, +0.0143]   delta_min = +-0.0143
+
+------------------------------------------------------------------------------
+  HORIZONTE 48 h
+------------------------------------------------------------------------------
+    Swin3D (FITS)      TSS por fold: 0.8394 +- 0.0403
+    BiLSTM (SHARP)     TSS por fold: 0.8219 +- 0.0215
+    -> piso de ruido del estudio (mayor sigma entre folds) = 0.0403
+
+    tau barrido en val (== tau_opt de los .txt)   (tau_swin=0.89, tau_lstm=0.97)
+       TSS: Swin3D 0.8684  |  BiLSTM 0.8412
+       Delta = +0.0272   IC95% = [+0.0020, +0.0544]
+       significancia: SI (IC excluye 0)
+       delta_min de equivalencia = +-0.0544 TSS   (1.35x el piso de ruido)
+
+    AUC (secundaria, invariante al umbral; B=2000)
+       Swin3D 0.9622  |  BiLSTM 0.9627
+       Delta = -0.0004   IC95% = [-0.0074, +0.0064]   delta_min = +-0.0074
+
+==============================================================================
+  VEREDICTO POR HORIZONTE  (redactado para citar)
+==============================================================================
+
+  24 h — Delta = -0.0161 TSS [-0.0202, -0.0120]: significativa frente al
+        muestreo del test (gana BiLSTM (SHARP)), PERO equivalentes dentro de
+        +-0.0202, que es solo 0.53x la sigma entre folds (0.0382).
+        => Reportar como diferencia POR DEBAJO del ruido de reentrenamiento:
+           no sostiene una recomendacion de modelo por si sola.
+
+  48 h — DIFIEREN. Delta = +0.0272 TSS [+0.0020, +0.0544];
+        gana Swin3D (FITS). La diferencia (0.0544) EXCEDE la sigma entre
+        folds (0.0403), asi que es reproducible al reentrenar.
+
+  Nota de método: el margen NO se eligió a conveniencia — se reporta el delta_min
+  que se deduce del IC, y se contrasta con la sigma entre folds del propio estudio.
+
+  ADVERTENCIA: un IC de bootstrap estrecho NO implica un resultado reproducible.
+  El bootstrap remuestrea el test con los modelos FIJOS; la sigma entre folds mide
+  qué pasa al reentrenar. Cuando delta_min < sigma, la diferencia es real para ESTE
+  test pero no sobrevive necesariamente a otra partición de entrenamiento.

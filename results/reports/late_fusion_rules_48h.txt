@@ -1,0 +1,16 @@
+Reglas fijas de fusión tardía (Kittler et al., 1998) — Swin3D + BiLSTM, 48 h
+(protocolo del ensemble: tau por fold sobre val, promedio de probs en test; B=10000)
+Referencia: mejor rama individual (Swin3D) TSS_ens = 0.8684
+
+  Método                     TSS μ±σ   TSS_ens               IC95%     AUC    POD    FAR    HSS     F1      τ
+  Swin3D (FITS)       0.8394±0.0403    0.8684   [0.8551, 0.8799]  0.9622  0.988  0.724  0.389  0.431   0.89
+  BiLSTM (SHARP)      0.8219±0.0215    0.8412   [0.8124, 0.8680]  0.9627  0.910  0.623  0.502  0.533   0.97
+  Media (sum)         0.8198±0.0121    0.8311   [0.8043, 0.8555]  0.9650  0.927  0.693  0.423  0.461   0.92
+  Producto            0.8178±0.0121    0.8326   [0.8062, 0.8571]  0.9620  0.927  0.689  0.428  0.465   0.85
+  Máximo              0.8201±0.0207    0.8333   [0.8061, 0.8584]  0.9722  0.923  0.677  0.442  0.478   0.97
+  Mínimo              0.8053±0.0264    0.8214   [0.7945, 0.8460]  0.9585  0.927  0.713  0.398  0.438   0.86
+
+Conclusión: ninguna regla fija de fusión supera a la mejor rama individual
+(Swin3D, TSS=0.8684). El resultado negativo se mantiene en toda la familia de
+fusión tardía: reglas fijas (media/producto/max/min), ensemble ponderado y
+stacking con meta-MLP.

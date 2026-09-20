@@ -1,0 +1,36 @@
+==============================================================================
+  BiLSTM-17 (v3, 17 params)  vs  BiLSTM-21 (v5, 21 params)
+==============================================================================
+
+------------------------------------------------------------------------------
+  HORIZONTE 24 h
+------------------------------------------------------------------------------
+    Swin3D (FITS)        TSS = 0.7422   (tau=0.88)
+    BiLSTM-17 (SHARP)    TSS = 0.7583   (tau=0.93)
+    BiLSTM-21 (SHARP)    TSS = 0.7048   (tau=0.69)
+
+    (1) ¿Mejora la rama física sola? — bootstrap pareado B=10000
+        BiLSTM-21 - BiLSTM-17:  D=-0.0536  IC95%=[-0.0583, -0.0490]  P(21>17)=0.0%  -> SIGNIFICATIVO
+
+    (2) ¿Cambia el techo estructural de la fusión con Swin3D?
+        rama física     mejor individual     techo    margen   regla
+        BiLSTM-17                 0.7664    0.7745   +0.0082   0001 AND (consenso)
+        BiLSTM-21                 0.7691    0.7796   +0.0104   0001 AND (consenso)
+
+------------------------------------------------------------------------------
+  HORIZONTE 48 h
+------------------------------------------------------------------------------
+    Swin3D (FITS)        TSS = 0.8684   (tau=0.89)
+    BiLSTM-17 (SHARP)    TSS = 0.8412   (tau=0.97)
+    BiLSTM-21 (SHARP)    TSS = 0.8215   (tau=0.94)
+
+    (1) ¿Mejora la rama física sola? — bootstrap pareado B=10000
+        BiLSTM-21 - BiLSTM-17:  D=-0.0196  IC95%=[-0.0331, -0.0076]  P(21>17)=0.0%  -> SIGNIFICATIVO
+
+    (2) ¿Cambia el techo estructural de la fusión con Swin3D?
+        rama física     mejor individual     techo    margen   regla
+        BiLSTM-17                 0.8690    0.8694   +0.0004   0001 AND (consenso)
+        BiLSTM-21                 0.8690    0.8702   +0.0012   0001 AND (consenso)
+
+  Lectura: el margen es una cota TRAMPOSA (umbrales y regla elegidos sobre test).
+  Si sigue en ~0 con 21 params, la redundancia con la rama visual es estructural.

@@ -1,0 +1,55 @@
+====================================================================================================
+  ¿DEPENDE ALGÚN RESULTADO DE MEANGBZ? — BiLSTM-17 (paper) vs BiLSTM-16b (sin MEANGBZ)
+  Única diferencia entre ambos: el parámetro MEANGBZ
+====================================================================================================
+
+####################################################################################################
+  HORIZONTE 24 h   (test n=9384, positivos=195)
+####################################################################################################
+
+  (1) Rama física sola
+      Modelo            TSS_ens    POD    FAR    HSS     F1     AUC    TP    FP   FN
+      Swin3D (ref.)      0.7422  0.883  0.887  0.166  0.197  0.9227   165   955   30
+      BiLSTM-17          0.7583  0.840  0.836  0.247  0.273  0.9200   165   807   30
+      BiLSTM-16b         0.7225  0.842  0.872  0.191  0.221  0.9174   165  1136   30
+      Δ TSS (BiLSTM-16b − BiLSTM-17) = -0.0358  IC95%=[-0.0397, -0.0321]  -> empeora (sig.)
+
+  (2) Fusión Swin3D + BiLSTM-16b — Δ contra la mejor rama individual: Swin3D (TSS 0.7422)
+      Método                TSS_ens    HSS     F1     Δ TSS                 IC95%   veredicto
+      Ensemble ponderado     0.7329  0.186  0.215   -0.0094   [-0.0136, -0.0051]   peor (sig.)
+      Stacking meta-MLP      0.7230  0.185  0.215   -0.0193   [-0.0235, -0.0150]   peor (sig.)
+      Regla: Media           0.7521  0.198  0.227   +0.0099   [+0.0072, +0.0126]   MEJOR (sig.)
+      Regla: Producto        0.7521  0.200  0.229   +0.0099   [+0.0072, +0.0126]   MEJOR (sig.)
+      Regla: Máximo          0.7324  0.204  0.233   -0.0098   [-0.0135, -0.0062]   peor (sig.)
+      Regla: Mínimo          0.7582  0.204  0.233   +0.0160   [+0.0135, +0.0186]   MEJOR (sig.)
+
+####################################################################################################
+  HORIZONTE 48 h   (test n=9384, positivos=413)
+####################################################################################################
+
+  (1) Rama física sola
+      Modelo            TSS_ens    POD    FAR    HSS     F1     AUC    TP    FP   FN
+      Swin3D (ref.)      0.8684  0.985  0.752  0.348  0.394  0.9622   408  1072    5
+      BiLSTM-17          0.8412  0.903  0.653  0.464  0.499  0.9627   376   621   37
+      BiLSTM-16b         0.8177  0.917  0.709  0.399  0.440  0.9579   381   940   32
+      Δ TSS (BiLSTM-16b − BiLSTM-17) = -0.0234  IC95%=[-0.0337, -0.0110]  -> empeora (sig.)
+
+  (2) Fusión Swin3D + BiLSTM-16b — Δ contra la mejor rama individual: Swin3D (TSS 0.8684)
+      Método                TSS_ens    HSS     F1     Δ TSS                 IC95%   veredicto
+      Ensemble ponderado     0.8293  0.381  0.423   -0.0391   [-0.0632, -0.0170]   peor (sig.)
+      Stacking meta-MLP      0.8162  0.373  0.416   -0.0522   [-0.0765, -0.0300]   peor (sig.)
+      Regla: Media           0.8164  0.372  0.415   -0.0520   [-0.0761, -0.0297]   peor (sig.)
+      Regla: Producto        0.8193  0.379  0.421   -0.0491   [-0.0732, -0.0271]   peor (sig.)
+      Regla: Máximo          0.8221  0.354  0.399   -0.0463   [-0.0670, -0.0279]   peor (sig.)
+      Regla: Mínimo          0.8209  0.378  0.420   -0.0475   [-0.0716, -0.0255]   peor (sig.)
+
+====================================================================================================
+  SÍNTESIS
+====================================================================================================
+  24h  rama física: Δ TSS = -0.0358 [-0.0397, -0.0321]  empeora (sig.)
+  24h  mejor fusión = Regla: Mínimo        Δ vs mejor rama = +0.0160 [+0.0135, +0.0186]  SUPERA
+  48h  rama física: Δ TSS = -0.0234 [-0.0337, -0.0110]  empeora (sig.)
+  48h  mejor fusión = Ensemble ponderado   Δ vs mejor rama = -0.0391 [-0.0632, -0.0170]  NO supera
+
+  Lectura: si los Δ de (1) no son significativos, quitar MEANGBZ no cambia la rama
+  física y la preselección señalada por el revisor no afecta a los resultados.

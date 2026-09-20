@@ -1,0 +1,134 @@
+
+==============================================================================
+  DIVERSIDAD ENTRE RAMAS — Horizonte 24 h
+==============================================================================
+  Test: 9384 ejemplos — 195 positivos (2.08 %), 9189 negativos
+  Punto de operacion honesto (tau barrido en val, promediado entre folds):
+    Swin3D (FITS) : tau=0.88  TSS=0.7422  TP=165 FN=30 FP=955
+    BiLSTM (SHARP): tau=0.93  TSS=0.7583  TP=165 FN=30 FP=807
+
+------------------------------------------------------------------------------
+  1. TABLAS DE CONTINGENCIA (acierto/fallo por instancia)
+------------------------------------------------------------------------------
+
+  POSITIVOS (fulgores >=M)  (n=195)
+                            BiLSTM acierta    BiLSTM falla
+    Swin3D acierta                     165               0
+    Swin3D falla                         0              30
+    -> solo Swin3D acierta: 0   solo BiLSTM acierta: 0   ambos fallan: 30
+
+  NEGATIVOS (quietud)  (n=9189)
+                            BiLSTM acierta    BiLSTM falla
+    Swin3D acierta                    8119             115
+    Swin3D falla                       263             692
+    -> solo Swin3D acierta: 115   solo BiLSTM acierta: 263   ambos fallan: 692
+
+  GLOBAL  (n=9384)
+                            BiLSTM acierta    BiLSTM falla
+    Swin3D acierta                    8284             115
+    Swin3D falla                       263             722
+    -> solo Swin3D acierta: 115   solo BiLSTM acierta: 263   ambos fallan: 722
+
+------------------------------------------------------------------------------
+  2. MEDIDAS DE DIVERSIDAD (Kuncheva & Whitaker 2003)
+------------------------------------------------------------------------------
+    Estrato                      Q de Yule    Desacuerdo D   rho oraculo
+    Global                          0.9899          0.0403        0.7735
+    Solo positivos                  1.0000          0.0000        1.0000
+    Solo negativos                  0.9893          0.0411        0.7662
+
+    Lectura: Q -> +1  errores totalmente correlacionados (sin diversidad);
+             Q ->  0  ramas independientes; D = fraccion de ejemplos en desacuerdo.
+    NOTA: la fila 'Global' esta inflada por el acuerdo trivial en verdaderos
+          negativos (desbalance ~1:22). Las filas estratificadas son las informativas.
+
+------------------------------------------------------------------------------
+  3. CORRELACION DE RANGOS DE SPEARMAN (probabilidades, no decisiones)
+------------------------------------------------------------------------------
+    Global        : rho = +0.8470
+    Solo positivos: rho = +0.6523
+    Solo negativos: rho = +0.8389
+    Lectura: rho alta => ambas ramas ORDENAN el test de forma parecida,
+             i.e. usan la misma senal para la tarea aunque la entrada difiera.
+
+------------------------------------------------------------------------------
+  4. TECHO EXACTO DE LA FUSION A NIVEL DE DECISION
+------------------------------------------------------------------------------
+    Las 2 decisiones binarias parten el test en 4 celdas. CUALQUIER regla que
+    use solo esas decisiones es una de las 16 asignaciones. Enumeradas todas:
+
+    Ocupacion de celdas (pred_Swin, pred_BiLSTM):
+      (0,0): n=  8149   positivos=   30   negativos=  8119
+      (0,1): n=   115   positivos=    0   negativos=   115
+      (1,0): n=   263   positivos=    0   negativos=   263
+      (1,1): n=   857   positivos=  165   negativos=   692
+
+    Rank  Regla(00,01,10,11)          TSS     TP      FP    FN   alias
+       1  0001                     0.7708    165     692    30   AND (consenso)
+       2  0101                     0.7583    165     807    30   solo BiLSTM
+       3  0011                     0.7422    165     955    30   solo Swin3D
+       4  0111                     0.7297    165    1070    30   OR (union)
+       5  1001                     0.0411    195    8811     0   
+       6  1101                     0.0286    195    8926     0   
+
+    TECHO = 0.7708  (regla '0001' AND (consenso))
+    Mejor rama individual = 0.7583  (BiLSTM)
+    MARGEN DISPONIBLE = +0.0125 TSS
+    => Existe una regla de decision mejor que ambas ramas: hay margen que
+       las fusiones probadas (reglas fijas, ensemble ponderado, stacking) no tomaron.
+
+    Techo de recall: positivos capturados por AL MENOS una rama = 165/195  (POD_union = 0.8462)
+    Swin3D solo captura 165/195 (POD = 0.8462); BiLSTM solo 165/195 (POD = 0.8462)
+    Falsas alarmas: Swin3D=955  BiLSTM=807  interseccion=692  union=1070
+    Solapamiento de FP (Jaccard) = 0.6467   [1.0 = mismas falsas alarmas; 0.0 = disjuntas]
+
+------------------------------------------------------------------------------
+  5. CONTROL DE HONESTIDAD (el techo de la seccion 4 se eligio viendo el test)
+------------------------------------------------------------------------------
+
+  (a) Regla seleccionada sobre VAL de cada fold, aplicada al TEST de ese fold:
+      Fold   regla val   alias               TSS test    Swin3D    BiLSTM
+      k=0    0001        AND (consenso)        0.7560    0.7080    0.7521
+      k=1    0101        solo BiLSTM           0.7488    0.6487    0.7488
+      k=2    0101        solo BiLSTM           0.7234    0.7116    0.7234
+      k=3    0101        solo BiLSTM           0.7438    0.7621    0.7438
+      k=4    0101        solo BiLSTM           0.7643    0.7397    0.7643
+      mu+-sigma                                0.7473    0.7140    0.7465
+                                               0.0138    0.0382    0.0134
+      Reglas distintas elegidas entre folds: 2  -> ['0001', '0101']
+      => la regla optima NO es estable entre folds: no hay sinergia reproducible.
+
+  (b) Bootstrap pareado del consenso AND (regla A PRIORI de Kittler, no elegida
+      sobre test) contra cada rama individual — B=10000, estratificado:
+      AND vs Swin3D   TSS 0.7708 vs 0.7422   D=+0.0286  IC95%=[+0.0252, +0.0320]  P(AND>Swin3D)=100.0%  -> SIGNIFICATIVO
+      AND vs BiLSTM   TSS 0.7708 vs 0.7583   D=+0.0125  IC95%=[+0.0102, +0.0148]  P(AND>BiLSTM)=100.0%  -> SIGNIFICATIVO
+
+      Recordatorio: la regla 'Minimo' sobre PROBABILIDADES (aprox. AND, con tau
+      re-barrido en val) ya fue evaluada en late_fusion_rules.py y quedo por
+      debajo de ambas ramas. El consenso solo aparece competitivo cuando se
+      congelan los tau individuales y se opera a nivel de decision.
+
+------------------------------------------------------------------------------
+  6. DIVERSIDAD CON POD IGUALADO (control del punto de operacion)
+------------------------------------------------------------------------------
+    POD fijado     solo Swin3D   solo BiLSTM    ambos   FP swin   FP lstm
+    0.80                     7             7      149       646       576
+    0.85                     0             0      165      1089      1827
+    0.90                     5             5      170      1556      2377
+    0.95                     2             2      183      3362      3059
+    (a POD igualado las capturas exclusivas son simetricas por construccion)
+    Lectura: SI existe diversidad a nivel de instancia cuando se igualan los POD;
+             lo que la seccion 7 muestra es que esa diversidad NO es productiva en TSS.
+
+------------------------------------------------------------------------------
+  7. TECHO ESTRUCTURAL — umbrales Y regla optimizados sobre el TEST
+------------------------------------------------------------------------------
+    Cota superior deliberadamente TRAMPOSA a favor de la fusion: elige los dos
+    umbrales y la regla viendo las etiquetas de test. Inalcanzable en la practica.
+
+    Mejor rama individual, con el mejor tau posible : 0.7664   (Swin3D 0.7490 / BiLSTM 0.7664)
+    Mejor regla de decision, con los mejores tau    : 0.7745   regla=0001 AND (consenso)  tau_swin=0.90 tau_lstm=0.95
+    MARGEN ESTRUCTURAL MAXIMO = +0.0082 TSS
+
+    => Este es el limite superior de lo que CUALQUIER fusion a nivel de decision
+       podria aportar sobre estas dos ramas, incluso con informacion del test.

@@ -1,0 +1,45 @@
+==============================================================================
+  RAMA FÍSICA: BiLSTM-17  vs  BiLSTM-21  vs  BiLSTM-16 (solo vectoriales)
+==============================================================================
+
+------------------------------------------------------------------------------
+  HORIZONTE 24 h
+------------------------------------------------------------------------------
+    Swin3D (FITS)                      TSS = 0.7422   (tau=0.88)
+    BiLSTM-17     12 vect + 5 LoS      TSS = 0.7583   (tau=0.93)
+    BiLSTM-21     16 vect + 5 LoS      TSS = 0.7048   (tau=0.69)
+    BiLSTM-16     16 vect, sin LoS     TSS = 0.6892   (tau=0.65)
+
+    (1) ¿Cambia la rama física sola? — bootstrap pareado B=10000
+        BiLSTM-16 - BiLSTM-17:  D=-0.0691  IC95%=[-0.0743, -0.0640]  P(16>17)=0.0%  -> SIGNIFICATIVO
+        BiLSTM-16 - BiLSTM-21:  D=-0.0156  IC95%=[-0.0190, -0.0121]  P(16>21)=0.0%  -> SIGNIFICATIVO
+
+    (2) ¿Cambia el techo estructural de la fusión con Swin3D?
+        rama física     mejor individual     techo    margen   regla
+        BiLSTM-17                 0.7664    0.7745   +0.0082   0001 AND (consenso)
+        BiLSTM-21                 0.7691    0.7796   +0.0104   0001 AND (consenso)
+        BiLSTM-16                 0.7735    0.7850   +0.0115   0001 AND (consenso)
+
+------------------------------------------------------------------------------
+  HORIZONTE 48 h
+------------------------------------------------------------------------------
+    Swin3D (FITS)                      TSS = 0.8684   (tau=0.89)
+    BiLSTM-17     12 vect + 5 LoS      TSS = 0.8412   (tau=0.97)
+    BiLSTM-21     16 vect + 5 LoS      TSS = 0.8215   (tau=0.94)
+    BiLSTM-16     16 vect, sin LoS     TSS = 0.7951   (tau=0.95)
+
+    (1) ¿Cambia la rama física sola? — bootstrap pareado B=10000
+        BiLSTM-16 - BiLSTM-17:  D=-0.0461  IC95%=[-0.0568, -0.0333]  P(16>17)=0.0%  -> SIGNIFICATIVO
+        BiLSTM-16 - BiLSTM-21:  D=-0.0265  IC95%=[-0.0411, -0.0099]  P(16>21)=0.2%  -> SIGNIFICATIVO
+
+    (2) ¿Cambia el techo estructural de la fusión con Swin3D?
+        rama física     mejor individual     techo    margen   regla
+        BiLSTM-17                 0.8690    0.8694   +0.0004   0001 AND (consenso)
+        BiLSTM-21                 0.8690    0.8702   +0.0012   0001 AND (consenso)
+        BiLSTM-16                 0.8690    0.8701   +0.0011   0001 AND (consenso)
+
+  Lectura: el margen es una cota TRAMPOSA (umbrales y regla elegidos sobre test).
+  - Margen de BiLSTM-16 en ~0     -> la redundancia NO viene de que la rama física
+                                    sea 'hija' del magnetograma: es causa física común.
+  - Margen de BiLSTM-16 claramente -> los 5 derivados del LoS eran la fuente de la
+    mayor que el de BiLSTM-17        redundancia; la fusión sí tiene espacio sin ellos.
