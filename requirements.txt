@@ -1,19 +1,22 @@
-# Versiones con las que se produjeron los resultados publicados.
-# El análisis (results/logits -> tablas y figuras) sólo necesita el primer bloque.
+# Versions used to produce the published results.
 
+# --- Analysis: reproduces every table and figure from results/logits ---
+# PyTorch is required here too: the bootstrap routines are vectorised with it.
+# A CPU-only build is enough; no GPU needed.
+#   pip install torch --index-url https://download.pytorch.org/whl/cpu
 numpy==2.4.6
 scipy==1.17.1
 scikit-learn==1.9.0
 matplotlib==3.10.9
 PyYAML==6.0.2
 tqdm==4.67.2
-
-# Entrenamiento (requiere GPU; no hace falta para reproducir el análisis)
 torch==2.12.1
+
+# --- Training: only needed to retrain the models (requires a CUDA GPU) ---
 torchvision==0.27.1
 pytorch-lightning==2.6.5
 Pillow==12.2.0
 
-# Descarga de datos desde el JSOC (sólo si se reconstruye el dataset)
+# --- Data: only needed to rebuild the dataset from the JSOC ---
 astropy==7.2.0
 drms==0.9.0
