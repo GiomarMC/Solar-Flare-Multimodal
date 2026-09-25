@@ -1,7 +1,7 @@
 """
 Two-panel ROC figure at 24 h and 48 h, side by side, for the SIMBig/LNCS paper.
 
-Copia paralela de graficos/fig_roc_2panel_en.py para el camera-ready de SIMBig (SIMBig55/).
+Versión para el camera-ready de SIMBig (formato LNCS).
 
 ÚNICA diferencia: la figura se dibuja al tamaño EXACTO que ocupa en la página
 (0.90\textwidth = 312 pt = 4.34 in), de modo que \includegraphics no la
@@ -12,8 +12,6 @@ Springer exige que la rotulación de las figuras no baje de 6 pt.
 Los tamaños de fuente NO se tocan; lo que cambia es figsize (y, donde hacía falta,
 se acortan etiquetas de leyenda para que quepan en el panel más estrecho).
 
-No modifica graficos/fig_roc_2panel_en.py ni RedaccionSIMBig/images/, que sirven a la versión
-IEEE y a la tesis, con otro ancho de columna.
 """
 
 import os
@@ -27,7 +25,8 @@ from sklearn.metrics import roc_curve
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from bootstrap_ci import ROOT, load_split, sigmoid, sweep_tau, auc_point, bootstrap_ci
 
-IMG = os.path.join(ROOT, "SIMBig55", "images")
+IMG = os.environ.get("SFMM_FIG", os.path.join(ROOT, "results", "figures"))
+os.makedirs(IMG, exist_ok=True)
 FOLDS = [0, 1, 2, 3, 4]
 MODELS = [("swin3d", "Swin3D (FITS)", "#1f77b4"), ("lstm", "BiLSTM (SHARP)", "#d62728")]
 # estilo por modelo: las actas se imprimen en B/N y solo el color no distingue
@@ -86,7 +85,7 @@ def main():
     fig.tight_layout()
     fig.savefig(os.path.join(IMG, "fig_roc_24_48h.pdf"), bbox_inches="tight")
     plt.close(fig)
-    print("Generated: SIMBig55/images/fig_roc_24_48h.pdf")
+    print(f"Generated: {IMG}/fig_roc_24_48h.pdf")
 
 
 if __name__ == "__main__":

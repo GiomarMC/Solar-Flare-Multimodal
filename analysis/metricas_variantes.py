@@ -9,16 +9,16 @@ Métricas, con el mismo protocolo que la tabla de resultados del paper:
   - TSS_ens, AUC, BSS, TP/FP/FN : sobre el ensemble (promedio de probabilidades de
                                   test entre folds, τ = media de los τ por fold).
   FAR = false alarm ratio = FP / (TP + FP), como en el paper.
-  BSS = Brier Skill Score frente a la climatología (graficos/bss_calibration.py),
+  BSS = Brier Skill Score frente a la climatología (analysis/bss_calibration.py),
         con probabilidades crudas. Solo tiene sentido para salidas que son
         probabilidades: en las reglas producto/máximo/mínimo no se reporta.
 
-Los métodos de fusión replican graficos/fusion_variantes.py (que a su vez replica
+Los métodos de fusión replican analysis/fusion_variantes.py (que a su vez replica
 el código del paper). Control: las filas de BiLSTM-17 a 48 h deben reproducir la
 tabla del paper (Swin3D POD 0.985 / FAR 0.752 / HSS 0.348 / F1 0.394, etc.).
 
 Uso:
-    python graficos/metricas_variantes.py
+    python analysis/metricas_variantes.py
 """
 import os
 import sys

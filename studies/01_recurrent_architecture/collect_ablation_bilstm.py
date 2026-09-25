@@ -6,7 +6,7 @@ por fold el τ óptimo sobre val (sweep) y el TSS de test, y agrega media ± σ 
 folds por configuración (hidden × capas). Reusa tss_point/sweep_tau de bootstrap_ci.
 
 Uso:
-    python graficos/collect_ablation_bilstm.py
+    python studies/01_recurrent_architecture/collect_ablation_bilstm.py
 """
 import os
 import sys
@@ -19,14 +19,15 @@ from bootstrap_ci import ROOT, sigmoid, tss_point, sweep_tau
 sys.path.insert(0, ROOT)   # para importar scripts.train_lstm_ablation
 
 ABL = os.path.join(ROOT, "outputs/logits_ablation")
-OUT = os.path.join(ROOT, "graficos")
+OUT = os.environ.get("SFMM_OUT", os.path.join(ROOT, "results", "reports"))
+os.makedirs(OUT, exist_ok=True)
 HIDDENS, LAYERS, FOLDS = [32, 64, 128], [1, 2], [0, 1, 2, 3, 4]
 
 
 def n_params(hidden, num_layers, sharp_dim=17, out_dim=None):
     """Cuenta de parámetros del LSTMStandaloneModel (sin instanciar torch)."""
     import torch
-    from scripts.train_lstm_ablation import LSTMStandaloneModel
+    from train_lstm_ablation import LSTMStandaloneModel
     m = LSTMStandaloneModel(sharp_dim=sharp_dim, hidden=hidden,
                             out_dim=out_dim or hidden, dropout=0.4, num_layers=num_layers)
     return sum(p.numel() for p in m.parameters())

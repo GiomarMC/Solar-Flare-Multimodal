@@ -21,13 +21,13 @@ Mide, a nivel de INSTANCIA, sobre los logits ya guardados (sin reentrenar):
      la mejor. Si la mejor coincide con "usar solo una rama", la fusion a nivel
      de decision es demostrablemente inutil, sea cual sea la arquitectura.
 
-Protocolo identico al del ensemble del cuerpo (graficos/bootstrap_ci.py):
+Protocolo identico al del ensemble del cuerpo (analysis/bootstrap_ci.py):
   por fold se barre tau sobre VAL (sin fuga); el ensemble promedia las
   probabilidades de test entre folds y usa tau = media de los tau por fold.
   Sanity: Swin3D y BiLSTM deben reproducir ~0.868 y ~0.841 a 48 h.
 
 Uso:
-    python graficos/diversidad_ramas.py
+    python analysis/diversidad_ramas.py
 """
 import os
 import sys

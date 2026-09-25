@@ -10,7 +10,7 @@ combinación FIJAS clásicas sobre los logits ya guardados, SIN reentrenar:
     max     = max(p_swin, p_lstm)            (orientada a sensibilidad)
     min     = min(p_swin, p_lstm)            (orientada a precisión)
 
-Protocolo idéntico al del ensemble del cuerpo (graficos/bootstrap_ci.py):
+Protocolo idéntico al del ensemble del cuerpo (analysis/bootstrap_ci.py):
   - Por fold: se combinan las probabilidades; el umbral tau se barre sobre el
     VAL del fold (sin fuga) y se aplica al TEST. TSS por fold -> media ± sigma.
   - Ensemble: se promedian las probabilidades combinadas de test entre folds y
@@ -20,7 +20,7 @@ Como referencia (sanity) recomputa también Swin3D y BiLSTM individuales bajo el
 MISMO protocolo: deben reproducir ~0.868 y ~0.841.
 
 Uso:
-    python graficos/late_fusion_rules.py
+    python analysis/late_fusion_rules.py
 """
 import os
 import sys
@@ -34,7 +34,8 @@ from bootstrap_ci import (ROOT, OUTDIR, load_split, sigmoid, sweep_tau,
                           tss_point, auc_point, bootstrap_ci)
 
 H, FOLDS = 48, [0, 1, 2, 3, 4]
-IMG = os.path.join(ROOT, "RedaccionIEEE", "images")
+IMG = os.environ.get("SFMM_FIG", os.path.join(ROOT, "results", "figures"))
+os.makedirs(IMG, exist_ok=True)
 B = 10000
 
 # Reglas de combinación parametrizables (operan sobre probabilidades)
@@ -163,9 +164,9 @@ def main():
     ax.legend(loc="lower right", fontsize=8.5, frameon=True)
     fig.tight_layout()
     fig.savefig(os.path.join(IMG, "fig8_late_fusion_rules_48h.pdf"))
-    fig.savefig(os.path.join(OUTDIR, "fig8_late_fusion_rules_48h.png"), dpi=150)
+    fig.savefig(os.path.join(IMG, "fig8_late_fusion_rules_48h.png"), dpi=150)
     plt.close(fig)
-    print("Figura:   RedaccionIEEE/images/fig8_late_fusion_rules_48h.pdf (+ graficos/.png)")
+    print(f"Figura:   {IMG}/fig8_late_fusion_rules_48h.pdf (+ .png)")
 
 
 if __name__ == "__main__":

@@ -37,7 +37,7 @@ mkdir -p outputs
 
 for H in 24 48; do
   for k in 0 1 2 3 4; do
-    CFG="configs/lstm16_cv_${H}h_k${k}.yaml"
+    CFG="studies/03_los_derived_ablation/configs/lstm16_cv_${H}h_k${k}.yaml"
     CKPT_DIR="outputs/checkpoints_lstm16_cv_${H}h_k${k}"
 
     echo ""
@@ -48,7 +48,7 @@ for H in 24 48; do
     if compgen -G "${CKPT_DIR}/*.ckpt" > /dev/null; then
       echo "  Ya hay checkpoints en ${CKPT_DIR} — se salta el entrenamiento."
     else
-      python "$REPO"/scripts/train_lstm16_standalone.py --config "$CFG"
+      python "$REPO"/studies/03_los_derived_ablation/train_lstm16_standalone.py --config "$CFG"
     fi
 
     echo "── ${H}h k=${k} entrenado" >> "$RESULTS_FILE"
@@ -57,17 +57,23 @@ done
 
 echo ""
 echo "Entrenamiento completo. Guardando logits..."
-python "$REPO"/scripts/save_logits_lstm16.py | tee -a "$RESULTS_FILE"
+python "$REPO"/studies/03_los_derived_ablation/save_logits_lstm16.py | tee -a "$RESULTS_FILE"
+
+# Los análisis leen SFMM_LOGITS: los logits recién generados (outputs/logits) y, para las
+# ramas que este estudio no reentrena (Swin3D, BiLSTM-17), los publicados en results/logits.
+cp -n results/logits/*.npz outputs/logits/
+export SFMM_LOGITS="$REPO/outputs/logits"
+
 
 echo ""
 echo "Recalculando el techo de fusión con la rama física de 16 params..."
-LSTM_MODEL=lstm16 python graficos/diversidad_ramas.py > /dev/null
+LSTM_MODEL=lstm16 python analysis/diversidad_ramas.py > /dev/null
 
 echo ""
 echo "Comparando las tres variantes de la rama física..."
-python graficos/comparar_lstm_variantes.py | tee -a "$RESULTS_FILE"
+python studies/03_los_derived_ablation/comparar_lstm_variantes.py | tee -a "$RESULTS_FILE"
 
 echo ""
 echo "Listo $(date)."
-echo "  graficos/diversidad_ramas_lstm16_{24,48}h.txt"
-echo "  graficos/comparar_lstm_variantes.txt"
+echo "  results/reports/diversidad_ramas_lstm16_{24,48}h.txt"
+echo "  results/reports/comparar_lstm_variantes.txt"

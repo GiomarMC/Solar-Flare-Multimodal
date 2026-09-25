@@ -48,12 +48,15 @@ def process_one(args):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--fits-dir',  default='/mnt/almacenamiento/magnetogram_fits')
-    parser.add_argument('--out-dir',   default='/mnt/almacenamiento/magnetogram_npy')
+    parser.add_argument('--fits-dir',  default=os.environ.get('SFMM_FITS', 'data/magnetogram_fits'))
+    # El dataset busca los .npy junto a los FITS, en .../magnetogram_npy/
+    parser.add_argument('--out-dir',   default=None)
     parser.add_argument('--img-size',  type=int, default=224)
     parser.add_argument('--clip-gauss', type=float, default=500.0)
     parser.add_argument('--workers',   type=int, default=8)
     args = parser.parse_args()
+    if args.out_dir is None:
+        args.out_dir = os.path.join(os.path.dirname(os.path.normpath(args.fits_dir)), 'magnetogram_npy')
 
     out_path = Path(args.out_dir)
     out_path.mkdir(parents=True, exist_ok=True)

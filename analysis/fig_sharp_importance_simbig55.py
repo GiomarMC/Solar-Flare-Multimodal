@@ -1,7 +1,7 @@
 """
 English compact version of the SHARP permutation-importance figure (BiLSTM, 48 h)
 
-Copia paralela de graficos/fig_sharp_importance_en.py para el camera-ready de SIMBig (SIMBig55/).
+Versión para el camera-ready de SIMBig (formato LNCS).
 
 ÚNICA diferencia: la figura se dibuja al tamaño EXACTO que ocupa en la página
 (0.56\textwidth = 194 pt = 2.70 in), de modo que \includegraphics no la
@@ -12,8 +12,6 @@ Springer exige que la rotulación de las figuras no baje de 6 pt.
 Los tamaños de fuente NO se tocan; lo que cambia es figsize (y, donde hacía falta,
 se acortan etiquetas de leyenda para que quepan en el panel más estrecho).
 
-No modifica graficos/fig_sharp_importance_en.py ni RedaccionSIMBig/images/, que sirven a la versión
-IEEE y a la tesis, con otro ancho de columna.
 """
 
 import os
@@ -25,8 +23,13 @@ import matplotlib.pyplot as plt
 from matplotlib.patches import Patch
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-IMG = os.path.join(ROOT, "SIMBig55", "images")
-TXT = os.path.join(ROOT, "graficos", "sharp_importance_48h.txt")
+IMG = os.environ.get("SFMM_FIG", os.path.join(ROOT, "results", "figures"))
+os.makedirs(IMG, exist_ok=True)
+# Informe de lstm_permutation_importance.py: el de SFMM_OUT si se regeneró, si no el publicado.
+TXT = os.path.join(os.environ.get("SFMM_OUT", os.path.join(ROOT, "results", "reports")),
+                   "sharp_importance_48h.txt")
+if not os.path.exists(TXT):
+    TXT = os.path.join(ROOT, "results", "reports", "sharp_importance_48h.txt")
 
 BASE_10 = {"USFLUX", "MEANGBZ", "MEANGBT", "MEANPOT", "SHRGT45",
            "TOTPOT", "SAVNCPP", "ABSNJZH", "AREA_ACR", "NACR"}
@@ -59,4 +62,4 @@ ax.tick_params(axis="x", labelsize=7)
 fig.tight_layout()
 fig.savefig(os.path.join(IMG, "fig7_sharp_importance_48h.pdf"), bbox_inches="tight")
 plt.close(fig)
-print(f"Generated from cache ({len(names)} params): SIMBig55/images/fig7_sharp_importance_48h.pdf")
+print(f"Generated from cache ({len(names)} params): {IMG}/fig7_sharp_importance_48h.pdf")

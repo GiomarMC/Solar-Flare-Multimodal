@@ -18,7 +18,7 @@ que ve la rama visual?
 Requiere outputs/logits/lstm16_*.npz (los genera scripts/save_logits_lstm16.py).
 
 Uso:
-    python graficos/comparar_lstm_variantes.py
+    python studies/03_los_derived_ablation/comparar_lstm_variantes.py
 """
 import os
 import sys

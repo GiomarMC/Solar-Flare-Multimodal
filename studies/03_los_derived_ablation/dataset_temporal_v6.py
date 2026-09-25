@@ -12,7 +12,7 @@ Cambios respecto a v5 (dataset_temporal_v5.py, 21 params):
   - Motivo: responder la objeción de que la rama física es "hija" de la visual.
     Si con solo parámetros vectoriales el techo de fusión sigue en ~0, la
     redundancia es por causa física común, no por derivación de los datos.
-    Ver graficos/fig_procedencia_datos.py.
+    Ver studies/02_sharp_provenance/fig_procedencia_datos.py.
   - Todo lo demás (arquitectura, splits, protocolo) es idéntico a v5.
 """
 

@@ -28,7 +28,7 @@ al muestreo del test, pero por debajo del ruido de reentrenamiento.
 coincide con el barrido en val — no son dos criterios distintos. Se verificó.)
 
 Uso:
-    python graficos/equivalencia_tost.py
+    python analysis/equivalencia_tost.py
 """
 import os
 import sys

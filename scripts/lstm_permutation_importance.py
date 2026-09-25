@@ -34,8 +34,10 @@ from scripts.save_logits_lstm import build_split_files, find_best_checkpoint, sw
 from scripts.dataset_temporal_v3 import SHARP_PARAMS
 
 HORIZON, FOLDS, SEEDS = 48, [0, 1, 2, 3, 4], 5
-OUT = os.path.join(ROOT, "graficos")
-IMG = os.path.join(ROOT, "RedaccionIEEE", "images")
+OUT = os.environ.get("SFMM_OUT", os.path.join(ROOT, "results", "reports"))
+IMG = os.environ.get("SFMM_FIG", os.path.join(ROOT, "results", "figures"))
+os.makedirs(OUT, exist_ok=True)
+os.makedirs(IMG, exist_ok=True)
 
 # Los 10 parámetros del conjunto base (Grim); el resto se completó desde JSOC.
 BASE_10 = {"USFLUX", "MEANGBZ", "MEANGBT", "MEANPOT", "SHRGT45",
@@ -102,7 +104,7 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--base_dir", default=None)
     args = ap.parse_args()
-    base_dir = args.base_dir or load_cfg("configs/lstm_cv_48h_k0.yaml")["data"]["base_dir"]
+    base_dir = args.base_dir or os.path.expandvars(load_cfg("configs/lstm_cv_48h_k0.yaml")["data"]["base_dir"])
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     print(f"Device: {device}\nBase: {base_dir}\n")
 
@@ -142,10 +144,10 @@ def main():
               loc="lower right", fontsize=8.5, frameon=True)
     fig.tight_layout()
     fig.savefig(os.path.join(IMG, "fig7_sharp_importance_48h.pdf"))
-    fig.savefig(os.path.join(OUT, "fig7_sharp_importance_48h.png"), dpi=150)
+    fig.savefig(os.path.join(IMG, "fig7_sharp_importance_48h.png"), dpi=150)
     plt.close(fig)
     print(f"\nGuardado: {txt}")
-    print("Figura:   RedaccionIEEE/images/fig7_sharp_importance_48h.pdf  (+ graficos/.png)")
+    print(f"Figura:   {IMG}/fig7_sharp_importance_48h.pdf  (+ .png)")
 
 
 if __name__ == "__main__":

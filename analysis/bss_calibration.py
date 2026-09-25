@@ -16,7 +16,7 @@ complementario al TSS. El motivo de la descalibración cruda es el WeightedRando
 (batches 1:1) + pos_weight usados en entrenamiento.
 
 Uso:
-    python graficos/bss_calibration.py
+    python analysis/bss_calibration.py
 """
 import os
 import sys
@@ -31,8 +31,10 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from bootstrap_ci import ROOT, load_split, sigmoid, read_tau_opt, tss_point, auc_point
 
 H, FOLDS = 48, [0, 1, 2, 3, 4]
-OUT = os.path.join(ROOT, "graficos")
-IMG = os.path.join(ROOT, "RedaccionIEEE", "images")
+OUT = os.environ.get("SFMM_OUT", os.path.join(ROOT, "results", "reports"))
+IMG = os.environ.get("SFMM_FIG", os.path.join(ROOT, "results", "figures"))
+os.makedirs(OUT, exist_ok=True)
+os.makedirs(IMG, exist_ok=True)
 MODELS = [("swin3d", "Swin3D (FITS)", "#1f77b4"), ("lstm", "BiLSTM (SHARP)", "#d62728")]
 
 
@@ -145,7 +147,7 @@ def main():
     fig.suptitle("Diagramas de fiabilidad — ensemble de folds, 48 h")
     fig.tight_layout()
     fig.savefig(os.path.join(IMG, "fig6_calibracion_48h.pdf"))
-    fig.savefig(os.path.join(OUT, "fig6_calibracion_48h.png"), dpi=150)
+    fig.savefig(os.path.join(IMG, "fig6_calibracion_48h.png"), dpi=150)
     plt.close(fig)
 
     txt = os.path.join(OUT, "bss_calibration_48h.txt")
@@ -153,7 +155,7 @@ def main():
         f.write("\n".join(lines) + "\n")
     print("\n".join(lines))
     print(f"\nGuardado: {txt}")
-    print("Figura:   RedaccionIEEE/images/fig6_calibracion_48h.pdf  (+ graficos/.png)")
+    print(f"Figura:   {IMG}/fig6_calibracion_48h.pdf  (+ .png)")
 
 
 if __name__ == "__main__":

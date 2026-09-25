@@ -11,8 +11,8 @@ la rama física se deriva del mismo dato que ve la rama visual ("padre-hijo"),
 o a redundancia por causa física común.
 
 Usage:
-    python scripts/train_lstm16_standalone.py --config configs/lstm16_cv_48h_k3.yaml
-    python scripts/train_lstm16_standalone.py --config configs/lstm16_cv_48h_k3.yaml --smoke 5
+    python studies/03_los_derived_ablation/train_lstm16_standalone.py --config studies/03_los_derived_ablation/configs/lstm16_cv_48h_k3.yaml
+    python studies/03_los_derived_ablation/train_lstm16_standalone.py --config studies/03_los_derived_ablation/configs/lstm16_cv_48h_k3.yaml --smoke 5
 """
 
 import os
@@ -30,8 +30,10 @@ from pytorch_lightning.callbacks import ModelCheckpoint, EarlyStopping
 from pytorch_lightning.loggers import CSVLogger
 from tqdm import tqdm
 
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from scripts.dataset_temporal_v6 import (
+_AQUI = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, os.path.dirname(os.path.dirname(_AQUI)))   # raíz del repo
+sys.path.insert(0, _AQUI)                                     # módulos de este estudio
+from dataset_temporal_v6 import (
     load_para_flare, _parse_split_file, _read_seq_file,
     _log_transform, N_SHARP,
 )
@@ -324,7 +326,7 @@ class LightningModule(pl.LightningModule):
 
 def build_datasets(cfg: dict):
     d = cfg['data']
-    base = d['base_dir']
+    base = os.path.expandvars(d['base_dir'])   # admite ${SFMM_DATA}
     para_path = os.path.join(base, d['para_flare'])
 
     train_files = [os.path.join(base, p) for p in d['splits']['train']]
@@ -352,7 +354,7 @@ def build_datasets(cfg: dict):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--config', default='configs/lstm16_cv_48h_k3.yaml')
+    parser.add_argument('--config', default=os.path.join(_AQUI, 'configs', 'lstm16_cv_48h_k3.yaml'))
     parser.add_argument('--smoke', type=int, default=0, metavar='N')
     args = parser.parse_args()
 

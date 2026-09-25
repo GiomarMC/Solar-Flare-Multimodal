@@ -11,8 +11,8 @@ memoria hidden/num_layers/physics_out y los directorios de salida (paralelos).
 Tras entrenar, guarda logits val+test en outputs/logits_ablation/.
 
 Uso:
-    python scripts/train_lstm_ablation.py --fold 3 --hidden 64 --num_layers 1
-    python scripts/train_lstm_ablation.py --fold 3 --hidden 128 --num_layers 2 --smoke 5
+    python studies/01_recurrent_architecture/train_lstm_ablation.py --fold 3 --hidden 64 --num_layers 1
+    python studies/01_recurrent_architecture/train_lstm_ablation.py --fold 3 --hidden 128 --num_layers 2 --smoke 5
 """
 import os
 import sys
@@ -27,7 +27,7 @@ import pytorch_lightning as pl
 from pytorch_lightning.callbacks import ModelCheckpoint, EarlyStopping
 from pytorch_lightning.loggers import CSVLogger
 
-ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))  # raíz del repo
 sys.path.insert(0, ROOT)
 from scripts.train_lstm_standalone import (
     SharpOnlyDataset, load_cfg, make_weighted_sampler,

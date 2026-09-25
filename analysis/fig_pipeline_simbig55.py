@@ -3,7 +3,7 @@ Figura 1 (arquitectura SF-MM) para el camera-ready de SIMBig — versión VECTOR
 
 Reemplaza images/pipeline.png, que tenía tres problemas:
   1. Dibujaba mal el ensemble: decía "Fusion (combine logits)" y una sigmoide
-     FINAL, cuando el código (graficos/bootstrap_paired.py::fusion_ensemble)
+     FINAL, cuando el código (analysis/bootstrap_paired.py::fusion_ensemble)
      aplica la sigmoide a CADA rama y promedia PROBABILIDADES. La sigmoide final
      solo vale para el stacking.
   2. Su rotulación quedaba en 2.8 pt impresa (Springer exige >= 6 pt), porque el
@@ -17,7 +17,7 @@ El `dpi=600` del savefig no afecta a lo vectorial: es por el magnetograma
 incrustado, que si no se guardaba a ~102 ppi.
 
 Uso:
-    python graficos/fig_pipeline_simbig55.py
+    python analysis/fig_pipeline_simbig55.py
 """
 import os
 import numpy as np
@@ -35,8 +35,9 @@ SEQ_EJEMPLO = "hmi.sharp_720s.5692.20150622_142400_TAI.to.20150623_142400_TAI"
 KEEP_17 = [0, 1, 2, 3, 4, 6, 7, 8, 11, 12, 14, 15, 16, 17, 18, 19, 20]
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-IMG = os.path.join(ROOT, "SIMBig55", "images")
-MAG = os.path.join(ROOT, "RedaccionSIMBig", "images", "magnetograma_ejemplo.jpeg")
+IMG = os.environ.get("SFMM_FIG", os.path.join(ROOT, "results", "figures"))
+os.makedirs(IMG, exist_ok=True)
+MAG = os.path.join(ROOT, "analysis", "assets", "magnetograma_ejemplo.jpeg")
 
 C_VIS, C_PHY, C_CMB, C_OUT = "#1f77b4", "#d62728", "#2ca02c", "#6a51a3"
 F_VIS, F_PHY, F_CMB = "#eaf3fb", "#fdeeee", "#eef8ee"
@@ -294,10 +295,10 @@ def main():
     fig.tight_layout(pad=0.1)
     # dpi alto solo por el magnetograma incrustado; lo vectorial no cambia
     fig.savefig(os.path.join(IMG, "pipeline.pdf"), bbox_inches="tight", dpi=600)
-    fig.savefig(os.path.join(ROOT, "graficos", "pipeline_simbig55.png"),
+    fig.savefig(os.path.join(IMG, "pipeline_simbig55.png"),
                 dpi=300, bbox_inches="tight")
     plt.close(fig)
-    print("Generated: SIMBig55/images/pipeline.pdf")
+    print(f"Generated: {IMG}/pipeline.pdf")
 
 
 if __name__ == "__main__":

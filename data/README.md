@@ -37,8 +37,9 @@ El JPEG de 8 bits descarta la escala física del campo en Gauss y su rango diná
 visual de este trabajo parte de los FITS originales del Joint Science Operations Center:
 
 ```bash
+export SFMM_FITS=/ruta/a/magnetogram_fits   # el directorio debe llamarse magnetogram_fits
 python scripts/download_jsoc_fits.py
-python scripts/preprocess_fits_to_npy.py
+python scripts/preprocess_fits_to_npy.py    # escribe los .npy en el hermano magnetogram_npy/
 ```
 
 Cada fotograma se recorta a la escala estándar de saturación de HMI/SHARP (+-500 G), se

@@ -9,9 +9,9 @@ Itera sobre los 5 folds ya entrenados para 24h y 48h.
 Puede correrse en CPU (no necesita GPU).
 
 Usage:
-    python scripts/save_logits_lstm21.py
-    python scripts/save_logits_lstm21.py --horizon 24
-    python scripts/save_logits_lstm21.py --horizon 48 --fold 3
+    python studies/03_los_derived_ablation/save_logits_lstm21.py
+    python studies/03_los_derived_ablation/save_logits_lstm21.py --horizon 24
+    python studies/03_los_derived_ablation/save_logits_lstm21.py --horizon 48 --fold 3
 """
 
 import os
@@ -25,11 +25,13 @@ import torch.multiprocessing
 torch.multiprocessing.set_sharing_strategy('file_system')
 from torch.utils.data import DataLoader
 
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from scripts.train_lstm21_standalone import (
+_AQUI = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, os.path.dirname(os.path.dirname(_AQUI)))   # raíz del repo
+sys.path.insert(0, _AQUI)                                     # módulos de este estudio
+from train_lstm21_standalone import (
     LightningModule, SharpOnlyDataset, load_cfg,
 )
-from scripts.dataset_temporal_v5 import (
+from dataset_temporal_v5 import (
     load_para_flare, _parse_split_file, _read_seq_file,
     _log_transform, N_SHARP,
 )
@@ -97,7 +99,7 @@ def build_split_files(base_dir: str, horizon: int, fold: int):
 
 def run_fold(base_dir: str, horizon: int, fold: int, device: torch.device):
     # Buscar config y checkpoint
-    cfg_path  = f"configs/lstm21_cv_{horizon}h_k{fold}.yaml"
+    cfg_path  = os.path.join(_AQUI, "configs", f"lstm21_cv_{horizon}h_k{fold}.yaml")
     ckpt_dir  = f"outputs/checkpoints_lstm21_cv_{horizon}h_k{fold}"
 
     if not os.path.exists(cfg_path):
@@ -169,10 +171,10 @@ def main():
     args = parser.parse_args()
 
     # Detectar base_dir desde el config que exista
-    sample_cfg = "configs/lstm21_cv_24h_k0.yaml"
+    sample_cfg = os.path.join(_AQUI, "configs", "lstm21_cv_24h_k0.yaml")
     with open(sample_cfg) as f:
         sample = yaml.safe_load(f)
-    base_dir = sample['data']['base_dir']
+    base_dir = os.path.expandvars(sample['data']['base_dir'])   # admite ${SFMM_DATA}
 
     device   = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     horizons = [args.horizon] if args.horizon else [24, 48]

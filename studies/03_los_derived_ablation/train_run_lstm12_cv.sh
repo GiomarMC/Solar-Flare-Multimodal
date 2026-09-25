@@ -7,7 +7,7 @@
 # splits que el BiLSTM-17: la única diferencia son esos 5 parámetros.
 #
 # Al terminar: guarda logits, recalcula el techo (diversidad_ramas) y genera el
-# informe de la ablación (graficos/ablacion_hijos.txt): métricas completas, techo
+# informe de la ablación (results/reports/ablacion_hijos.txt): métricas completas, techo
 # de decisión y los 6 métodos de fusión contra la mejor rama.
 #
 # Reanuda automáticamente: si ya hay checkpoints para un fold, salta el entrenamiento.
@@ -37,7 +37,7 @@ mkdir -p outputs
 
 for H in 24 48; do
   for k in 0 1 2 3 4; do
-    CFG="configs/lstm12_cv_${H}h_k${k}.yaml"
+    CFG="studies/03_los_derived_ablation/configs/lstm12_cv_${H}h_k${k}.yaml"
     CKPT_DIR="outputs/checkpoints_lstm12_cv_${H}h_k${k}"
 
     echo ""
@@ -48,7 +48,7 @@ for H in 24 48; do
     if compgen -G "${CKPT_DIR}/*.ckpt" > /dev/null; then
       echo "  Ya hay checkpoints en ${CKPT_DIR} — se salta el entrenamiento."
     else
-      python "$REPO"/scripts/train_lstm12_standalone.py --config "$CFG"
+      python "$REPO"/studies/03_los_derived_ablation/train_lstm12_standalone.py --config "$CFG"
     fi
 
     echo "── ${H}h k=${k} entrenado" >> "$RESULTS_FILE"
@@ -57,17 +57,23 @@ done
 
 echo ""
 echo "Entrenamiento completo. Guardando logits..."
-python "$REPO"/scripts/save_logits_lstm12.py | tee -a "$RESULTS_FILE"
+python "$REPO"/studies/03_los_derived_ablation/save_logits_lstm12.py | tee -a "$RESULTS_FILE"
+
+# Los análisis leen SFMM_LOGITS: los logits recién generados (outputs/logits) y, para las
+# ramas que este estudio no reentrena (Swin3D, BiLSTM-17), los publicados en results/logits.
+cp -n results/logits/*.npz outputs/logits/
+export SFMM_LOGITS="$REPO/outputs/logits"
+
 
 echo ""
 echo "Recalculando el techo de fusión con la rama física de 12 params..."
-LSTM_MODEL=lstm12 python graficos/diversidad_ramas.py > /dev/null
+LSTM_MODEL=lstm12 python analysis/diversidad_ramas.py > /dev/null
 
 echo ""
 echo "Informe de la ablación pura (métricas + techo + 6 métodos de fusión)..."
-python graficos/ablacion_hijos.py 2>&1 | grep -v -i warning | tee -a "$RESULTS_FILE"
+python studies/03_los_derived_ablation/ablacion_hijos.py 2>&1 | grep -v -i warning | tee -a "$RESULTS_FILE"
 
 echo ""
 echo "Listo $(date)."
-echo "  graficos/ablacion_hijos.txt"
-echo "  graficos/diversidad_ramas_lstm12_{24,48}h.txt"
+echo "  results/reports/ablacion_hijos.txt"
+echo "  results/reports/diversidad_ramas_lstm12_{24,48}h.txt"

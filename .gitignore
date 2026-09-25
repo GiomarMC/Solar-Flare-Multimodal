@@ -16,3 +16,6 @@ lightning_logs/
 data/SFF_MagSeq_MViTs/
 data/magnetogram_fits/
 data/para_flare_21params.txt
+
+# Figuras: se regeneran con los scripts de analysis/ (ver README)
+results/figures/

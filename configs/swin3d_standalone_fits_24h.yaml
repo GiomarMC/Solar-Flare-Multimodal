@@ -1,6 +1,6 @@
 data:
   base_dir: ${SFMM_DATA}
-  fits_dir: /mnt/almacenamiento/magnetogram_fits
+  fits_dir: ${SFMM_FITS}
   horizon: 24
 
 model:

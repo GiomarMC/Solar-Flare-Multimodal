@@ -7,15 +7,15 @@ Fusión tardía Swin3D + rama física con las tres variantes de la BiLSTM:
 
 Pregunta: sin los parámetros que se calculan sobre el mismo magnetograma que ve
 la rama visual, ¿alguna fusión supera a la mejor rama individual? El techo de
-graficos/diversidad_ramas.py solo acota la fusión a nivel de DECISIÓN; aquí se
+analysis/diversidad_ramas.py solo acota la fusión a nivel de DECISIÓN; aquí se
 evalúan los métodos que combinan PROBABILIDADES, que no están acotados por él.
 
 Métodos (réplica exacta del código que produjo los números del paper, importando
 sus funciones sin modificarlas):
-  - Ensemble ponderado  -> graficos/bootstrap_paired.py::fusion_ensemble
+  - Ensemble ponderado  -> analysis/bootstrap_paired.py::fusion_ensemble
                            (w_phys y tau por fold sobre VAL; w en pasos de 0.05)
-  - Stacking meta-MLP   -> graficos/stacking_5fold.py::train_meta / meta_probs
-  - Reglas de Kittler   -> graficos/late_fusion_rules.py::RULES / eval_rule
+  - Stacking meta-MLP   -> analysis/stacking_5fold.py::train_meta / meta_probs
+  - Reglas de Kittler   -> analysis/late_fusion_rules.py::RULES / eval_rule
                            (media, producto, máximo, mínimo)
 Protocolo común: tau por fold barrido sobre VAL, promedio de probabilidades de
 test entre folds, tau = media de los tau por fold. Cada fusión se compara con la
@@ -29,7 +29,7 @@ Control: la fila BiLSTM-17 debe reproducir el paper (48 h: ensemble 0.8335,
 stacking 0.8168).
 
 Uso:
-    python graficos/fusion_variantes.py
+    python analysis/fusion_variantes.py
 """
 import os
 import sys

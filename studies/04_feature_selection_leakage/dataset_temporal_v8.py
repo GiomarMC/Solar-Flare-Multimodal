@@ -3,7 +3,7 @@ Dataset temporal v8 — 16 parámetros SHARP: los 17 de v3 sin MEANGBZ.
 
 Responde al Revisor #1 de SIMBig, que objeta que la d de Cohen usada para la
 preselección se calculó sobre el dataset COMPLETO. Al recalcularla solo con los
-folds de entrenamiento (graficos/cohen_d_por_fold.py), la selección resulta
+folds de entrenamiento (studies/04_feature_selection_leakage/cohen_d_por_fold.py), la selección resulta
 idéntica en los 5 folds y en ambos horizontes salvo por un caso en la frontera:
 
     MEANGBZ   48h: d = 0.634 (dataset completo)  vs  0.494-0.580 (por fold)

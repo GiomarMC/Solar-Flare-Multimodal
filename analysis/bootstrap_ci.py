@@ -14,7 +14,7 @@ Para cada modelo y horizonte produce:
 El bootstrap corre vectorizado en GPU (CUDA) por bloques.
 
 Uso:
-    python graficos/bootstrap_ci.py --model lstm --horizons 24 48 --B 10000
+    python analysis/bootstrap_ci.py --model lstm --horizons 24 48 --B 10000
 """
 
 import os
@@ -27,8 +27,9 @@ import torch
 ROOT        = os.environ.get("SFMM_ROOT",
                   os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 LOGITS_DIR  = os.environ.get("SFMM_LOGITS", os.path.join(ROOT, "results", "logits"))
-METRICS_DIR = "/mnt/almacenamiento/SF-Multimodal-outputs"
+METRICS_DIR = os.environ.get("SFMM_METRICS", os.path.join(ROOT, "outputs"))
 OUTDIR      = os.environ.get("SFMM_OUT", os.path.join(ROOT, "results", "reports"))
+FIGDIR      = os.environ.get("SFMM_FIG", os.path.join(ROOT, "results", "figures"))
 
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
@@ -47,7 +48,8 @@ def read_tau_opt(model, horizon, fold):
 
     El nombre del archivo varía por modelo: el LSTM usa el patrón
     'metrics_{model}_cv_*' y Swin3D usa 'metrics_{model}_fits_*'. Se prueban
-    ambos (y la copia local en outputs/) y se toma el primero que exista.
+    ambos (y la copia local en outputs/) y se toma el primero que exista; si no hay
+    ninguno, se recalcula desde los logits de validación.
     """
     candidates = [
         os.path.join(METRICS_DIR, f"metrics_{model}_cv_{horizon}h_k{fold}.txt"),
@@ -62,7 +64,12 @@ def read_tau_opt(model, horizon, fold):
                 m = re.match(r"\s*tau_opt:\s*([0-9.]+)", line)
                 if m:
                     return float(m.group(1))
-    return None
+    # Sin el .txt de métricas (p. ej. en un clon del repo): mismo barrido de τ que el
+    # entrenamiento sobre los logits de validación incluidos. Reproduce los 20 τ publicados.
+    val = load_split(model, horizon, fold, "val")
+    if val is None:
+        return None
+    return sweep_tau(sigmoid(val[0]), val[1])[0]
 
 
 def sigmoid(x):

@@ -168,7 +168,7 @@ def main():
     sample_cfg = "configs/lstm_cv_24h_k0.yaml"
     with open(sample_cfg) as f:
         sample = yaml.safe_load(f)
-    base_dir = sample['data']['base_dir']
+    base_dir = os.path.expandvars(sample['data']['base_dir'])   # admite ${SFMM_DATA}
 
     device   = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     horizons = [args.horizon] if args.horizon else [24, 48]

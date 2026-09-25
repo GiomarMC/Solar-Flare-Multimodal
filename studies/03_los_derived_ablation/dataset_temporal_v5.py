@@ -9,7 +9,7 @@ Cambios respecto a v3 (dataset_temporal_v3.py):
     0.26, 0.065, 0.17, 0.080, frente a 0.9-0.99 de la familia de sumas).
     Es decir, la selección univariada descartó precisamente la información
     potencialmente NO redundante con la rama de imagen. Ver
-    graficos/diversidad_ramas.py y graficos/redundancia_sharp_imagen.txt.
+    analysis/diversidad_ramas.py y results/reports/redundancia_sharp_imagen.txt.
   - Todo lo demás (arquitectura, splits, protocolo) es idéntico a v3.
 """
 

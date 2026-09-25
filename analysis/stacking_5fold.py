@@ -9,7 +9,7 @@ Replica EXACTO el meta-MLP de scripts/train_stacking_meta_mlp.py:
 Para cada fold usa los .npz de swin3d_{h}h_k{f} y lstm_{h}h_k{f} (val/test), idénticos a los
 del bootstrap. Reporta por fold + CV media±σ + ensemble, y el pareado Stacking vs Swin3D / BiLSTM.
 
-Uso: python graficos/stacking_5fold.py --horizon 48 --B 10000
+Uso: python analysis/stacking_5fold.py --horizon 48 --B 10000
 """
 import os, sys, argparse
 import numpy as np
@@ -17,7 +17,7 @@ import torch
 import torch.nn as nn
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from bootstrap_ci import ROOT, DEVICE, load_split, read_tau_opt, sigmoid, tss_point, sweep_tau
+from bootstrap_ci import ROOT, OUTDIR, DEVICE, load_split, read_tau_opt, sigmoid, tss_point, sweep_tau
 from bootstrap_paired import model_ensemble, paired_delta, fmt
 
 
@@ -115,7 +115,7 @@ def main():
     for s in (fmt("Stacking", "Swin3D", r1), fmt("Stacking", "BiLSTM", r2)):
         print(s); lines.append(s)
 
-    out = os.path.join(ROOT, "graficos", f"stacking_5fold_{h}h.txt")
+    out = os.path.join(OUTDIR, f"stacking_5fold_{h}h.txt")
     with open(out, "w") as f:
         f.write("\n".join(lines) + "\n")
     print(f"\nGuardado: {out}")

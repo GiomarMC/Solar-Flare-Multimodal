@@ -4,7 +4,7 @@ Verificación para el Revisor #1 de SIMBig: ¿depende algún resultado de MEANGB
 Contexto. El paper preselecciona 17 de 21 parámetros SHARP con la d de Cohen
 calculada sobre el dataset completo. El revisor objeta que eso usa indirectamente
 información de los periodos de evaluación. Al recalcular la d solo con los folds
-de entrenamiento (graficos/cohen_d_por_fold.py), la selección sale IDÉNTICA en los
+de entrenamiento (studies/04_feature_selection_leakage/cohen_d_por_fold.py), la selección sale IDÉNTICA en los
 5 folds y en ambos horizontes, con un único caso en la frontera:
 
     MEANGBZ   48h: 0.634 (dataset completo)  vs  0.494-0.580 (por fold)
@@ -22,12 +22,12 @@ publicado y la objeción queda cerrada empíricamente.
 Reporta, por horizonte: métricas completas de la rama física, bootstrap pareado
 del TSS (16b − 17), y si la fusión sigue sin superar a la mejor rama individual.
 
-NO confundir con graficos/ablacion_hijos.py (BiLSTM-12, otra pregunta).
+NO confundir con studies/03_los_derived_ablation/ablacion_hijos.py (BiLSTM-12, otra pregunta).
 
 Requiere outputs/logits/lstm16b_*.npz (scripts/save_logits_lstm16b.py).
 
 Uso:
-    python graficos/verificacion_meangbz.py
+    python studies/04_feature_selection_leakage/verificacion_meangbz.py
 """
 import os
 import sys

@@ -140,8 +140,8 @@ python analysis/fig_roc_2panel_simbig55.py
 python analysis/fig_pipeline_simbig55.py     # needs the base dataset
 ```
 
-Figures are vector PDFs sized for the LNCS text width, with lettering above the 6 pt minimum
-required by Springer.
+Figures are written to `results/figures/` as vector PDFs sized for the LNCS text width, with
+lettering above the 6 pt minimum required by Springer.
 
 ## Data
 
@@ -173,8 +173,9 @@ Every script and config refers to `${SFMM_DATA}`. There are no absolute paths in
 the visual branch works from the original FITS files instead:
 
 ```bash
+export SFMM_FITS=/path/to/magnetogram_fits   # the directory name must be magnetogram_fits
 python scripts/download_jsoc_fits.py
-python scripts/preprocess_fits_to_npy.py
+python scripts/preprocess_fits_to_npy.py     # writes .npy to the sibling magnetogram_npy/
 ```
 
 Each frame is clipped to the standard HMI/SHARP saturation of +-500 G, normalised to [-1, 1],
@@ -199,6 +200,7 @@ It holds 73,810 rows, one per magnetogram.
 
 ```bash
 export SFMM_DATA=/path/to/SFF_MagSeq_MViTs
+export SFMM_FITS=/path/to/magnetogram_fits   # visual branch only
 
 # Visual branch
 python scripts/train_swin3d_standalone_fits.py --config configs/swin3d_standalone_fits_48h.yaml
@@ -237,12 +239,14 @@ Study analyses run from the included logits and need no GPU. Retraining the vari
 ```
 .
 ├── scripts/      data download, datasets, training, logit extraction
+├── models/       Swin3D video encoder used by the visual branch
 ├── analysis/     metrics, bootstrap, fusion, calibration, paper figures
 ├── configs/      YAML for the published models (5 folds x 2 horizons)
 ├── studies/      the four ablation studies, self-contained
 ├── results/
 │   ├── logits/   126 .npz files: every model, horizon and fold
-│   └── reports/  text reports with the published numbers
+│   ├── reports/  text reports with the published numbers
+│   └── figures/  figures, created when the figure scripts run
 └── data/         SHARP complement and dataset instructions
 ```
 
@@ -278,6 +282,8 @@ Logits are raw, before the sigmoid. Apply `1 / (1 + exp(-x))` for probabilities.
 | `SFMM_ROOT` | Repository root | derived from the file location |
 | `SFMM_LOGITS` | Logits directory | `results/logits` |
 | `SFMM_OUT` | Where reports are written | `results/reports` |
+| `SFMM_FIG` | Where figures are written | `results/figures` |
+| `SFMM_FITS` | FITS magnetogram directory (named `magnetogram_fits`) | unset. Required to train the visual branch |
 
 ## Notes and caveats
 

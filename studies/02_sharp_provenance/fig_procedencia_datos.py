@@ -19,7 +19,7 @@ Fuentes: Hoeksema et al. 2014 (SoPh 289, 3483; Fig. 2 y §2.3),
          Bobra et al. 2014 (SoPh 289, 3549; §4, Tabla 3, Tablas A.7/A.8),
          Couvidat et al. 2012/2016 (algoritmo MDI-like).
 
-Genera RedaccionIEEE/images/procedencia_datos.pdf (+ graficos/procedencia_datos.png).
+Genera results/figures/procedencia_datos.pdf (+ .png).
 """
 import os
 import numpy as np
@@ -28,9 +28,9 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 from matplotlib.patches import FancyBboxPatch, FancyArrowPatch, Circle
 
-ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-IMG = os.path.join(ROOT, "RedaccionIEEE", "images")
-OUT = os.path.join(ROOT, "graficos")
+ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))  # raíz del repo
+IMG = os.environ.get("SFMM_FIG", os.path.join(ROOT, "results", "figures"))
+OUT = IMG
 
 C_TRUNK = "#6a3d9a"   # tronco común (fotones -> Stokes)
 C_VIS   = "#1f77b4"   # rama visual (LoS)

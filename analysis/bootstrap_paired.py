@@ -16,7 +16,7 @@ Construye, en 5-fold y sobre el test común:
 Compara con bootstrap pareado:  Swin3D vs BiLSTM,  Fusión vs Swin3D,  Fusión vs BiLSTM.
 
 Uso:
-    python graficos/bootstrap_paired.py --horizon 48 --B 10000
+    python analysis/bootstrap_paired.py --horizon 48 --B 10000
 """
 
 import os
@@ -26,7 +26,7 @@ import numpy as np
 import torch
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from bootstrap_ci import (ROOT, DEVICE, load_split, read_tau_opt,
+from bootstrap_ci import (ROOT, OUTDIR, DEVICE, load_split, read_tau_opt,
                           sigmoid, tss_point, sweep_tau)
 
 
@@ -171,7 +171,7 @@ def main():
               fmt("Fusión", "BiLSTM", r3)):
         print(s); lines.append(s)
 
-    out = os.path.join(ROOT, "graficos", f"bootstrap_paired_{h}h.txt")
+    out = os.path.join(OUTDIR, f"bootstrap_paired_{h}h.txt")
     with open(out, "w") as f:
         f.write("\n".join(lines) + "\n")
     print(f"\nGuardado: {out}")

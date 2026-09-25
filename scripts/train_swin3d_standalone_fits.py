@@ -196,6 +196,10 @@ class LightningModule(pl.LightningModule):
 def build_datasets(cfg, fold):
     d = cfg['data']
     base = os.path.expandvars(d['base_dir'])   # admite ${SFMM_DATA}
+    fits_dir = os.path.expandvars(d['fits_dir'])   # admite ${SFMM_FITS}
+    if '$' in fits_dir or not os.path.isdir(fits_dir):
+        raise FileNotFoundError(f"Directorio de FITS no encontrado: {fits_dir!r}. "
+                                "Define SFMM_FITS (ver data/README.md).")
     h = d['horizon']
     para_path = os.path.join(base, 'para_flare_21params.txt')
     m = cfg['model']
@@ -209,21 +213,21 @@ def build_datasets(cfg, fold):
 
     train_ds = FITSTemporalDataset(
         split_files=train_files, base_dir=base, seq_dir=seq_dir,
-        fits_dir=d['fits_dir'], para_flare_path=para_path,
+        fits_dir=fits_dir, para_flare_path=para_path,
         augment=True, img_size=m['img_size'], num_frames=m['num_frames'],
         clip_gauss=m.get('clip_gauss', 500.0), **aug,
     )
     sharp_medians = train_ds.sharp_medians
     val_ds = FITSTemporalDataset(
         split_files=val_files, base_dir=base, seq_dir=seq_dir,
-        fits_dir=d['fits_dir'], para_flare_path=para_path,
+        fits_dir=fits_dir, para_flare_path=para_path,
         sharp_medians=sharp_medians, augment=False,
         img_size=m['img_size'], num_frames=m['num_frames'],
         clip_gauss=m.get('clip_gauss', 500.0),
     )
     test_ds = FITSTemporalDataset(
         split_files=test_files, base_dir=base, seq_dir=seq_dir,
-        fits_dir=d['fits_dir'], para_flare_path=para_path,
+        fits_dir=fits_dir, para_flare_path=para_path,
         sharp_medians=sharp_medians, augment=False,
         img_size=m['img_size'], num_frames=m['num_frames'],
         clip_gauss=m.get('clip_gauss', 500.0),

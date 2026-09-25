@@ -17,7 +17,7 @@ y se contrasta con los valores citados en scripts/dataset_temporal_v3.py
 (MEANGBH 0.14, MEANJZH 0.11, MEANJZD 0.53, MEANALP 0.17).
 
 Uso:
-    python graficos/cohen_d_por_fold.py
+    python studies/04_feature_selection_leakage/cohen_d_por_fold.py
 """
 import os
 import sys

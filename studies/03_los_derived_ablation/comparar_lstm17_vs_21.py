@@ -14,7 +14,7 @@ Responde dos preguntas separadas:
 Requiere outputs/logits/lstm21_*.npz (los genera scripts/save_logits_lstm21.py).
 
 Uso:
-    python graficos/comparar_lstm17_vs_21.py
+    python studies/03_los_derived_ablation/comparar_lstm17_vs_21.py
 """
 import os
 import sys

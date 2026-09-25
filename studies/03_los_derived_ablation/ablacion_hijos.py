@@ -22,7 +22,7 @@ fusion_variantes.py, cuyos controles reproducen la tabla publicada).
 Requiere outputs/logits/lstm12_*.npz (scripts/save_logits_lstm12.py).
 
 Uso:
-    python graficos/ablacion_hijos.py
+    python studies/03_los_derived_ablation/ablacion_hijos.py
 """
 import os
 import sys

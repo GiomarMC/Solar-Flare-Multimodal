@@ -17,7 +17,7 @@ Si un parametro correlaciona alto con estos agregados, la rama visual ya lo tien
 y no puede aportar nada nuevo a la fusion.
 
 Uso:
-    python graficos/redundancia_sharp_imagen.py
+    python studies/02_sharp_provenance/redundancia_sharp_imagen.py
 """
 import os
 import sys
@@ -122,7 +122,7 @@ def main():
     w("  de que ambas modalidades compartan fuente física.")
     w()
     w("  Contraste a testear: BiLSTM-21 (dataset_temporal_v5) y recálculo del techo")
-    w("  con LSTM_MODEL=lstm21 python graficos/diversidad_ramas.py")
+    w("  con LSTM_MODEL=lstm21 python analysis/diversidad_ramas.py")
 
     out = os.path.join(OUTDIR, "redundancia_sharp_imagen.txt")
     with open(out, "w") as f:

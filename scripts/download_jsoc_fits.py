@@ -8,7 +8,7 @@ y las descarga con HTTP — mucho más rápido que el sistema de export.
 Uso:
   python scripts/download_jsoc_fits.py \\
       --jpg-dir  /ruta/a/magnetogram_jpg \\
-      --out-dir  /mnt/almacenamiento/magnetogram_fits \\
+      --out-dir  data/magnetogram_fits \\
       --workers  8
 
 Reanuda automáticamente: los archivos ya descargados se saltan.
@@ -157,7 +157,7 @@ def main():
     parser.add_argument('--jpg-dir',
         default=os.path.join(os.environ.get('SFMM_DATA', ''), 'magnetogram_jpg'))
     parser.add_argument('--out-dir',
-        default='/mnt/almacenamiento/magnetogram_fits')
+        default=os.environ.get('SFMM_FITS', 'data/magnetogram_fits'))
     parser.add_argument('--workers', type=int, default=8,
         help='HARPNUMs procesados en paralelo (default: 8)')
     parser.add_argument('--dry-run', action='store_true')

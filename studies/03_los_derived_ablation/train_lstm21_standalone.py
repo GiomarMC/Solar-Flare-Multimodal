@@ -6,7 +6,7 @@ mismo protocolo, mismos splits. La ÚNICA diferencia es el dataset: v5 en lugar
 de v3, es decir 21 parámetros en vez de 17.
 
 Objetivo: comprobar si el techo estructural de la fusión (+0.0004 TSS a 48h,
-+0.0082 a 24h, ver graficos/diversidad_ramas_*.txt) se debe a redundancia
++0.0082 a 24h, ver results/reports/diversidad_ramas_*.txt) se debe a redundancia
 física inevitable o a que la selección univariada de v3 descartó justamente
 los 4 parámetros menos recuperables desde la imagen.
 
@@ -16,8 +16,8 @@ Etapa 1 del pre-entrenamiento independiente:
   - El checkpoint guardado se usará en train_pretrained_fusion.py
 
 Usage:
-    python scripts/train_lstm21_standalone.py --config configs/lstm21_cv_48h_k3.yaml
-    python scripts/train_lstm21_standalone.py --config configs/lstm21_cv_48h_k3.yaml --smoke 5
+    python studies/03_los_derived_ablation/train_lstm21_standalone.py --config studies/03_los_derived_ablation/configs/lstm21_cv_48h_k3.yaml
+    python studies/03_los_derived_ablation/train_lstm21_standalone.py --config studies/03_los_derived_ablation/configs/lstm21_cv_48h_k3.yaml --smoke 5
 """
 
 import os
@@ -35,8 +35,10 @@ from pytorch_lightning.callbacks import ModelCheckpoint, EarlyStopping
 from pytorch_lightning.loggers import CSVLogger
 from tqdm import tqdm
 
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from scripts.dataset_temporal_v5 import (
+_AQUI = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, os.path.dirname(os.path.dirname(_AQUI)))   # raíz del repo
+sys.path.insert(0, _AQUI)                                     # módulos de este estudio
+from dataset_temporal_v5 import (
     load_para_flare, _parse_split_file, _read_seq_file,
     _log_transform, N_SHARP,
 )
@@ -329,7 +331,7 @@ class LightningModule(pl.LightningModule):
 
 def build_datasets(cfg: dict):
     d = cfg['data']
-    base = d['base_dir']
+    base = os.path.expandvars(d['base_dir'])   # admite ${SFMM_DATA}
     para_path = os.path.join(base, d['para_flare'])
 
     train_files = [os.path.join(base, p) for p in d['splits']['train']]
@@ -357,7 +359,7 @@ def build_datasets(cfg: dict):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--config', default='configs/lstm21_cv_48h_k3.yaml')
+    parser.add_argument('--config', default=os.path.join(_AQUI, 'configs', 'lstm21_cv_48h_k3.yaml'))
     parser.add_argument('--smoke', type=int, default=0, metavar='N')
     args = parser.parse_args()
 
