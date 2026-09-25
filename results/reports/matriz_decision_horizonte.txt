@@ -31,4 +31,4 @@
 ====================================================================================
   Nota: 'gana por X pero < sigma folds' significa que la diferencia es real para
   ESTE test pero menor que la variabilidad al reentrenar — no sostiene por sí sola
-  una recomendación de modelo. Ver graficos/equivalencia_tost.txt.
+  una recomendación de modelo. Ver results/reports/equivalencia_tost.txt.

@@ -1,6 +1,6 @@
 
 ==============================================================================
-  DIVERSIDAD ENTRE RAMAS — Horizonte 24 h
+  DIVERSIDAD ENTRE RAMAS — Horizonte 24 h   (rama fisica: lstm)
 ==============================================================================
   Test: 9384 ejemplos — 195 positivos (2.08 %), 9189 negativos
   Punto de operacion honesto (tau barrido en val, promediado entre folds):
